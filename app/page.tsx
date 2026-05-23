@@ -103,7 +103,17 @@ export default function Home() {
 
             {result && (
               <div className="mt-6 bg-slate-950/70 border border-white/10 p-5 rounded-2xl">
-                <div className="text-2xl font-bold mb-4">{result}</div>
+                <div
+  className={`text-2xl font-bold mb-4 ${
+    result.includes("✅")
+      ? "text-green-400"
+      : result.includes("❌")
+      ? "text-red-400"
+      : "text-yellow-400"
+  }`}
+>
+  {result}
+</div>
 
                 {documentName && (
                   <div className="space-y-3 text-slate-300">
