@@ -8,6 +8,7 @@ export default function Home() {
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
   const [documentName, setDocumentName] = useState("");
+  const [documentOwner, setDocumentOwner] = useState("");
   const [owner, setOwner] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
@@ -34,6 +35,7 @@ export default function Home() {
 
       setResult("✅ Belge geçerli");
       setDocumentName(data.name || "");
+      setDocumentOwner(data.owner || "");
       setOwner(data.owner || "");
       setDate(data.date || "");
       setStatus(data.status || "valid");
@@ -120,6 +122,10 @@ export default function Home() {
                     <div className="flex justify-between border-b border-white/10 pb-2">
                       <span>Belge adı</span>
                       <strong>{documentName}</strong>
+                      <div className="flex justify-between border-b border-white/10 pb-2">
+  <span>Firma / Kişi</span>
+  <strong>{documentOwner}</strong>
+</div>
                     </div>
 
                     <div className="flex justify-between border-b border-white/10 pb-2">
