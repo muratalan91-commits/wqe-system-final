@@ -29,6 +29,7 @@ export default function AdminPage() {
   const [status, setStatus] = useState("valid");
 
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [pdfName, setPdfName] = useState("");
 
   const [message, setMessage] = useState("");
   const [verifyLink, setVerifyLink] = useState("");
@@ -231,22 +232,22 @@ export default function AdminPage() {
           </select>
 
           <div className="mb-4">
-            <label className="block mb-2 text-sm text-slate-300">
-              PDF Sertifika Yükle
-            </label>
+  <label className="block mb-2 text-sm text-slate-300">
+    PDF Dosya Adı
+  </label>
 
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => {
-                if (e.target.files?.[0]) {
-                  setPdfFile(e.target.files[0]);
-                }
-              }}
-              className="w-full p-4 rounded-xl bg-slate-800 outline-none"
-            />
+  <input
+    type="text"
+    value={pdfName}
+    onChange={(e) => setPdfName(e.target.value)}
+    placeholder="Örn: sertifika.pdf"
+    className="w-full p-4 rounded-xl bg-slate-800 outline-none"
+  />
 
-            {pdfFile && (
+  <div className="mt-2 text-xs text-slate-400">
+    PDF dosyasını public/pdf klasörüne yükleyin
+  </div>
+</div>
               <div className="mt-2 text-green-400 text-sm">
                 ✅ Seçilen PDF: {pdfFile.name}
               </div>
