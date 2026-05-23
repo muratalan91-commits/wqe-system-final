@@ -12,7 +12,7 @@ export default function Home() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
 
-  const getStatusText = (value: string) => {
+  const statusText = (value: string) => {
     if (value === "valid") return "Geçerli";
     if (value === "expired") return "Süresi Doldu";
     if (value === "cancelled") return "İptal Edildi";
@@ -27,11 +27,7 @@ export default function Home() {
       return;
     }
 
-    const q = query(
-      collection(db, "documents"),
-      where("code", "==", searchCode)
-    );
-
+    const q = query(collection(db, "documents"), where("code", "==", searchCode));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
@@ -63,158 +59,159 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-950 via-slate-950 to-black" />
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-blue-600/30 blur-3xl" />
-        <div className="absolute top-60 -left-24 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
+    <main className="min-h-screen bg-[#f5f8ff] text-slate-900">
+      <header className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-black text-blue-700">WQE Belge Dijital</h1>
+            <p className="text-sm text-slate-500">Belge Doğrulama Sistemi</p>
+          </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-8">
-          <header className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center mb-20">
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">WQE Belge Sistemi</h1>
-              <p className="text-slate-400 text-sm">Dijital belge doğrulama altyapısı</p>
+          <a
+            href="/Admin"
+            className="bg-blue-700 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-blue-800"
+          >
+            Admin Panel
+          </a>
+        </div>
+      </header>
+
+      <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-slate-950 text-white">
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,#60a5fa,transparent_35%)]" />
+
+        <div className="relative max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="inline-block bg-white/10 border border-white/20 px-4 py-2 rounded-full text-sm mb-6">
+              Güvenli Dijital Doğrulama
             </div>
 
-            <a
-              href="/Admin"
-              className="bg-white/10 border border-white/15 px-5 py-2 rounded-full text-sm hover:bg-white/20 transition"
+            <h2 className="text-4xl md:text-6xl font-black leading-tight mb-6">
+              Belgelerinizi anında doğrulayın.
+            </h2>
+
+            <p className="text-blue-100 text-lg mb-8 max-w-xl">
+              Belge kodu veya QR kod ile sistemde kayıtlı belgelerin geçerliliğini hızlı,
+              güvenli ve kurumsal şekilde kontrol edin.
+            </p>
+
+            <div className="grid grid-cols-3 gap-4 max-w-xl">
+              <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
+                <div className="text-2xl font-bold">QR</div>
+                <div className="text-xs text-blue-100">Doğrulama</div>
+              </div>
+              <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
+                <div className="text-2xl font-bold">7/24</div>
+                <div className="text-xs text-blue-100">Erişim</div>
+              </div>
+              <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
+                <div className="text-2xl font-bold">SSL</div>
+                <div className="text-xs text-blue-100">Güvenli</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-2xl">
+            <h3 className="text-3xl font-black mb-2">Belge Sorgula</h3>
+            <p className="text-slate-500 mb-6">
+              Belge üzerindeki doğrulama kodunu giriniz.
+            </p>
+
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="Örn: WQE-002"
+              className="w-full p-4 rounded-2xl bg-slate-100 border border-slate-200 outline-none mb-4 focus:border-blue-600"
+            />
+
+            <button
+              onClick={() => verifyDocument()}
+              className="w-full bg-blue-700 hover:bg-blue-800 text-white p-4 rounded-2xl font-bold"
             >
-              Admin Panel
-            </a>
-          </header>
+              Belgeyi Doğrula
+            </button>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center pb-20">
-            <div>
-              <div className="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full bg-blue-500/15 border border-blue-400/25 text-blue-200 text-sm">
-                <span className="h-2 w-2 rounded-full bg-green-400" />
-                Güvenli ve hızlı belge doğrulama
-              </div>
-
-              <h2 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-                Belgenizi saniyeler içinde doğrulayın.
-              </h2>
-
-              <p className="text-slate-300 text-lg md:text-xl mb-8 max-w-xl">
-                Belge kodunu girerek veya QR kodu okutarak sistemde kayıtlı olup
-                olmadığını anında kontrol edin.
-              </p>
-
-              <div className="grid grid-cols-3 gap-3 max-w-xl">
-                <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
-                  <div className="text-2xl font-bold">QR</div>
-                  <div className="text-xs text-slate-400">Destekli</div>
+            {result && (
+              <div className="mt-6 border border-slate-200 rounded-2xl p-5 bg-slate-50">
+                <div
+                  className={`text-2xl font-black mb-4 ${
+                    result.includes("✅")
+                      ? "text-green-600"
+                      : result.includes("❌")
+                      ? "text-red-600"
+                      : "text-yellow-600"
+                  }`}
+                >
+                  {result}
                 </div>
-                <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
-                  <div className="text-2xl font-bold">24/7</div>
-                  <div className="text-xs text-slate-400">Erişim</div>
-                </div>
-                <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
-                  <div className="text-2xl font-bold">SSL</div>
-                  <div className="text-xs text-slate-400">Güvenli</div>
-                </div>
-              </div>
-            </div>
 
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 md:p-8 shadow-2xl">
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold">Belge Doğrulama</h3>
-                <p className="text-slate-400 mt-1">Belge kodunu aşağıya girin.</p>
-              </div>
-
-              <input
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="Örn: WQE-002"
-                className="w-full p-4 rounded-2xl bg-slate-950/70 border border-white/10 outline-none mb-4 focus:border-blue-400"
-              />
-
-              <button
-                onClick={() => verifyDocument()}
-                className="w-full bg-blue-600 hover:bg-blue-700 p-4 rounded-2xl font-semibold transition"
-              >
-                Belgeyi Doğrula
-              </button>
-
-              {result && (
-                <div className="mt-6 bg-slate-950/70 border border-white/10 p-5 rounded-2xl">
-                  <div
-                    className={`text-2xl font-bold mb-4 ${
-                      result.includes("✅")
-                        ? "text-green-400"
-                        : result.includes("❌")
-                        ? "text-red-400"
-                        : "text-yellow-400"
-                    }`}
-                  >
-                    {result}
-                  </div>
-
-                  {documentName && (
-                    <div className="space-y-3 text-slate-300">
-                      <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
-                        <span>Belge adı</span>
-                        <strong className="text-right text-white">{documentName}</strong>
-                      </div>
-
-                      <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
-                        <span>Firma / Kişi</span>
-                        <strong className="text-right text-white">{owner}</strong>
-                      </div>
-
-                      <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
-                        <span>Tarih</span>
-                        <strong className="text-right text-white">{date}</strong>
-                      </div>
-
-                      <div className="flex justify-between gap-4 items-center">
-                        <span>Durum</span>
-                        <strong
-                          className={`px-3 py-1 rounded-full text-sm ${
-                            status === "valid"
-                              ? "bg-green-500/20 text-green-300"
-                              : status === "expired"
-                              ? "bg-yellow-500/20 text-yellow-300"
-                              : "bg-red-500/20 text-red-300"
-                          }`}
-                        >
-                          {getStatusText(status)}
-                        </strong>
-                      </div>
+                {documentName && (
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between gap-4 border-b pb-2">
+                      <span className="text-slate-500">Belge adı</span>
+                      <strong>{documentName}</strong>
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
 
-          <div className="grid md:grid-cols-3 gap-4 pb-12">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-              <h4 className="font-bold mb-2">Anlık Kontrol</h4>
-              <p className="text-slate-400 text-sm">
-                Belgeler Firebase veritabanından anında sorgulanır.
-              </p>
-            </div>
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-              <h4 className="font-bold mb-2">QR Doğrulama</h4>
-              <p className="text-slate-400 text-sm">
-                QR okutulduğunda belge kodu otomatik olarak doğrulanır.
-              </p>
-            </div>
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
-              <h4 className="font-bold mb-2">Kurumsal Altyapı</h4>
-              <p className="text-slate-400 text-sm">
-                Vercel ve Firebase ile hızlı, güvenli ve ölçeklenebilir sistem.
-              </p>
-            </div>
-          </div>
+                    <div className="flex justify-between gap-4 border-b pb-2">
+                      <span className="text-slate-500">Firma / Kişi</span>
+                      <strong>{owner}</strong>
+                    </div>
 
-          <footer className="border-t border-white/10 py-6 text-sm text-slate-500 flex flex-col sm:flex-row justify-between gap-2">
-            <span>© 2026 WQE Belge Sistemi</span>
-            <span>Dijital doğrulama altyapısı</span>
-          </footer>
+                    <div className="flex justify-between gap-4 border-b pb-2">
+                      <span className="text-slate-500">Tarih</span>
+                      <strong>{date}</strong>
+                    </div>
+
+                    <div className="flex justify-between gap-4 items-center">
+                      <span className="text-slate-500">Durum</span>
+                      <strong
+                        className={`px-3 py-1 rounded-full text-xs ${
+                          status === "valid"
+                            ? "bg-green-100 text-green-700"
+                            : status === "expired"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {statusText(status)}
+                      </strong>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </section>
+
+      <section className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+          <h4 className="text-xl font-black mb-2">Anlık Sorgulama</h4>
+          <p className="text-slate-500">
+            Belgeler Firebase veritabanından canlı olarak kontrol edilir.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+          <h4 className="text-xl font-black mb-2">QR Kod Desteği</h4>
+          <p className="text-slate-500">
+            QR kod okutulduğunda belge otomatik olarak doğrulanır.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+          <h4 className="text-xl font-black mb-2">Kurumsal Görünüm</h4>
+          <p className="text-slate-500">
+            Müşteriye güven veren sade ve profesyonel doğrulama ekranı.
+          </p>
+        </div>
+      </section>
+
+      <footer className="bg-slate-950 text-slate-400 py-6">
+        <div className="max-w-7xl mx-auto px-6 flex justify-between text-sm">
+          <span>© 2026 WQE Belge Dijital</span>
+          <span>Belge Doğrulama Sistemi</span>
+        </div>
+      </footer>
     </main>
   );
 }
