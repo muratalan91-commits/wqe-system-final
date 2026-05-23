@@ -182,7 +182,11 @@ setVerifyLink(`${window.location.origin}/?code=${code}`);
               </div>
 
               <button
-                onClick={() => deleteDocument(item.id)}
+                onClick={() => {
+  if (confirm("Bu belge silinsin mi?")) {
+    deleteDocument(item.id);
+  }
+}}
                 className="bg-red-600 px-4 py-2 rounded-xl"
               >
                 Sil
