@@ -8,6 +8,9 @@ export default function Home() {
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
   const [documentName, setDocumentName] = useState("");
+  const [owner, setOwner] = useState("");
+  const [date, setDate] = useState("");
+  const [status, setStatus] = useState("");
 
   const verifyDocument = async (customCode?: string) => {
     const searchCode = customCode || code;
@@ -23,10 +26,17 @@ export default function Home() {
     if (querySnapshot.empty) {
       setResult("❌ Belge bulunamadı");
       setDocumentName("");
+      setOwner("");
+      setDate("");
+      setStatus("");
     } else {
       const data: any = querySnapshot.docs[0].data();
+
       setResult("✅ Belge geçerli");
       setDocumentName(data.name || "");
+      setOwner(data.owner || "");
+      setDate(data.date || "");
+      setStatus(data.status || "valid");
     }
   };
 
@@ -71,21 +81,6 @@ export default function Home() {
               Belge kodunu girerek sistemde kayıtlı olup olmadığını anında kontrol edin.
               QR kod ile otomatik doğrulama desteği vardır.
             </p>
-
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
-                <div className="text-2xl font-bold">QR</div>
-                <div className="text-xs text-slate-400">Destekli</div>
-              </div>
-              <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
-                <div className="text-2xl font-bold">24/7</div>
-                <div className="text-xs text-slate-400">Erişim</div>
-              </div>
-              <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
-                <div className="text-2xl font-bold">SSL</div>
-                <div className="text-xs text-slate-400">Güvenli</div>
-              </div>
-            </div>
           </div>
 
           <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
@@ -108,10 +103,29 @@ export default function Home() {
 
             {result && (
               <div className="mt-6 bg-slate-950/70 border border-white/10 p-5 rounded-2xl">
-                <div className="text-2xl font-bold">{result}</div>
+                <div className="text-2xl font-bold mb-4">{result}</div>
+
                 {documentName && (
-                  <div className="mt-2 text-slate-300">
-                    Belge adı: {documentName}
+                  <div className="space-y-3 text-slate-300">
+                    <div className="flex justify-between border-b border-white/10 pb-2">
+                      <span>Belge adı</span>
+                      <strong>{documentName}</strong>
+                    </div>
+
+                    <div className="flex justify-between border-b border-white/10 pb-2">
+                      <span>Firma / Kişi</span>
+                      <strong>{owner}</strong>
+                    </div>
+
+                    <div className="flex justify-between border-b border-white/10 pb-2">
+                      <span>Tarih</span>
+                      <strong>{date}</strong>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span>Durum</span>
+                      <strong>{status === "valid" ? "Geçerli" : status}</strong>
+                    </div>
                   </div>
                 )}
               </div>
