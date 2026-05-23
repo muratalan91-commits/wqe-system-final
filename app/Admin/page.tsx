@@ -108,6 +108,9 @@ setVerifyLink(`${window.location.origin}/?code=${code}`);
     <main className="min-h-screen bg-black text-white p-10">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold mb-10">Admin Panel</h1>
+        <div className="bg-zinc-900 p-4 rounded-xl mb-6">
+  Toplam belge sayısı: <strong>{documents.length}</strong>
+</div>
 
         <div className="bg-zinc-900 p-6 rounded-2xl mb-10">
           <input
