@@ -21,6 +21,7 @@ export default function AdminPage() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("valid");
   const [message, setMessage] = useState("");
+  const [verifyLink, setVerifyLink] = useState("");
   const [documents, setDocuments] = useState<any[]>([]);
 
   const adminPassword = "428260428260murat";
@@ -55,7 +56,7 @@ export default function AdminPage() {
       status,
       createdAt: new Date()
     });
-
+setVerifyLink(`${window.location.origin}/?code=${code}`);
     setMessage("✅ Belge eklendi");
     setCode("");
     setName("");
@@ -155,7 +156,11 @@ export default function AdminPage() {
 
           {message && <div className="mt-4">{message}</div>}
         </div>
-
+{verifyLink && (
+  <div className="mt-4 p-4 bg-zinc-900 rounded-xl break-all text-sm text-blue-300">
+    {verifyLink}
+  </div>
+)}
         <div className="space-y-4">
           {documents.map((item) => (
             <div
