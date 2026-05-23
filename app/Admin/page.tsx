@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
-import { db } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import {
   addDoc,
   collection,
@@ -10,6 +10,11 @@ import {
   deleteDoc,
   doc
 } from "firebase/firestore";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "firebase/storage";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
@@ -20,6 +25,8 @@ export default function AdminPage() {
   const [owner, setOwner] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("valid");
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+
   const [message, setMessage] = useState("");
   const [verifyLink, setVerifyLink] = useState("");
   const [documents, setDocuments] = useState<any[]>([]);
@@ -48,20 +55,34 @@ export default function AdminPage() {
       return;
     }
 
+    let pdfUrl = "";
+
+    if (pdfFile) {
+      const pdfRef = ref(storage, `certificates/${code}-${pdfFile.name}`);
+      await uploadBytes(pdfRef, pdfFile);
+      pdfUrl = await getDownloadURL(pdfRef);
+    }
+
     await addDoc(collection(db, "documents"), {
       code,
       name,
       owner,
       date,
       status,
+      pdfUrl,
       createdAt: new Date()
     });
-setVerifyLink(`${window.location.origin}/?code=${code}`);
+
+    setVerifyLink(`${window.location.origin}/?code=${code}`);
     setMessage("✅ Belge eklendi");
+
     setCode("");
     setName("");
     setOwner("");
     setDate("");
+    setStatus("valid");
+    setPdfFile(null);
+
     loadDocuments();
   };
 
@@ -73,16 +94,16 @@ setVerifyLink(`${window.location.origin}/?code=${code}`);
 
   if (!isLoggedIn) {
     return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center p-6">
-        <div className="bg-zinc-900 p-8 rounded-2xl w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-6">Admin Giriş</h1>
+      <main className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-6">
+        <div className="bg-slate-900 p-8 rounded-3xl w-full max-w-md border border-white/10">
+          <h1 className="text-3xl font-black mb-6">Admin Giriş</h1>
 
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Şifre"
-            className="w-full p-4 rounded-xl bg-zinc-800 mb-4 outline-none"
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
           />
 
           <button
@@ -93,7 +114,7 @@ setVerifyLink(`${window.location.origin}/?code=${code}`);
                 setMessage("❌ Şifre yanlış");
               }
             }}
-            className="w-full bg-blue-600 p-4 rounded-xl"
+            className="w-full bg-blue-700 p-4 rounded-xl font-bold"
           >
             Giriş Yap
           </button>
@@ -105,91 +126,117 @@ setVerifyLink(`${window.location.origin}/?code=${code}`);
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
-      <div className="max-w-5xl mx-auto">
-        <h1 className="text-4xl font-bold mb-10">Admin Panel</h1>
-        <div className="bg-zinc-900 p-4 rounded-xl mb-6">
-  Toplam belge sayısı: <strong>{documents.length}</strong>
-</div>
+    <main className="min-h-screen bg-slate-950 text-white p-6 md:p-10">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-10">
+          <h1 className="text-4xl font-black">WQE Admin Panel</h1>
+          <p className="text-slate-400 mt-2">
+            Belge ekle, PDF sertifika yükle, QR doğrulama linki oluştur.
+          </p>
+        </div>
 
-        <div className="bg-zinc-900 p-6 rounded-2xl mb-10">
+        <div className="bg-slate-900 p-4 rounded-2xl mb-6 border border-white/10">
+          Toplam belge sayısı: <strong>{documents.length}</strong>
+        </div>
+
+        <div className="bg-slate-900 p-6 rounded-3xl mb-8 border border-white/10">
           <input
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Belge kodu"
-            className="w-full p-4 rounded-xl bg-zinc-800 mb-4 outline-none"
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
           />
 
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Belge adı"
-            className="w-full p-4 rounded-xl bg-zinc-800 mb-4 outline-none"
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
           />
 
           <input
             value={owner}
             onChange={(e) => setOwner(e.target.value)}
             placeholder="Firma / Kişi adı"
-            className="w-full p-4 rounded-xl bg-zinc-800 mb-4 outline-none"
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
           />
 
           <input
             value={date}
             onChange={(e) => setDate(e.target.value)}
             placeholder="Tarih: 23.05.2026"
-            className="w-full p-4 rounded-xl bg-zinc-800 mb-4 outline-none"
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
           />
+
           <select
-  value={status}
-  onChange={(e) => setStatus(e.target.value)}
-  className="w-full p-4 rounded-xl bg-zinc-800 mb-4 outline-none"
->
-  <option value="valid">Geçerli</option>
-  <option value="expired">Süresi Doldu</option>
-  <option value="cancelled">İptal Edildi</option>
-</select>
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
+          >
+            <option value="valid">Geçerli</option>
+            <option value="expired">Süresi Doldu</option>
+            <option value="cancelled">İptal Edildi</option>
+          </select>
+
+          <label className="block bg-slate-800 p-4 rounded-xl mb-4 cursor-pointer">
+            <span className="block text-slate-300 mb-2">PDF Sertifika Yükle</span>
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
+              className="w-full text-sm"
+            />
+          </label>
 
           <button
             onClick={addDocument}
-            className="bg-blue-600 px-6 py-4 rounded-xl"
+            className="bg-blue-700 hover:bg-blue-800 px-6 py-4 rounded-xl font-bold"
           >
             Belge Ekle
           </button>
 
           {message && <div className="mt-4">{message}</div>}
+
+          {verifyLink && (
+            <div className="mt-4 p-4 bg-slate-800 rounded-xl break-all text-sm text-blue-300">
+              {verifyLink}
+            </div>
+          )}
         </div>
-{verifyLink && (
-  <div className="mt-4 p-4 bg-zinc-900 rounded-xl break-all text-sm text-blue-300">
-    {verifyLink}
-  </div>
-)}
+
         <div className="space-y-4">
           {documents.map((item) => (
             <div
               key={item.id}
-              className="bg-zinc-900 p-4 rounded-xl flex items-center justify-between gap-4"
+              className="bg-slate-900 p-5 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 border border-white/10"
             >
               <div>
-                <div className="text-xl font-bold">{item.code}</div>
+                <div className="text-xl font-black">{item.code}</div>
                 <div>{item.name}</div>
-                <div>{item.owner}</div>
-                <div>{item.date}</div>
+                <div className="text-slate-400">{item.owner}</div>
+                <div className="text-slate-400">{item.date}</div>
+
+                {item.pdfUrl && (
+                  <a
+                    href={item.pdfUrl}
+                    target="_blank"
+                    className="inline-block mt-3 text-blue-300 underline"
+                  >
+                    PDF Sertifikayı Aç
+                  </a>
+                )}
               </div>
 
-              <div className="bg-white p-2 rounded-xl">
-                <QRCodeCanvas
-                  value={`${siteUrl}/?code=${item.code}`}
-                  size={90}
-                />
+              <div className="bg-white p-2 rounded-xl w-fit">
+                <QRCodeCanvas value={`${siteUrl}/?code=${item.code}`} size={90} />
               </div>
 
               <button
                 onClick={() => {
-  if (confirm("Bu belge silinsin mi?")) {
-    deleteDocument(item.id);
-  }
-}}
+                  if (confirm("Bu belge silinsin mi?")) {
+                    deleteDocument(item.id);
+                  }
+                }}
                 className="bg-red-600 px-4 py-2 rounded-xl"
               >
                 Sil

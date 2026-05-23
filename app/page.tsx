@@ -11,6 +11,7 @@ export default function Home() {
   const [owner, setOwner] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
+  const [pdfUrl, setPdfUrl] = useState("");
 
   const statusText = (value: string) => {
     if (value === "valid") return "Geçerli";
@@ -36,6 +37,7 @@ export default function Home() {
       setOwner("");
       setDate("");
       setStatus("");
+      setPdfUrl("");
       return;
     }
 
@@ -46,6 +48,7 @@ export default function Home() {
     setOwner(data.owner || "");
     setDate(data.date || "");
     setStatus(data.status || "valid");
+    setPdfUrl(data.pdfUrl || "");
   };
 
   useEffect(() => {
@@ -96,12 +99,12 @@ export default function Home() {
 
             <div className="grid grid-cols-3 gap-4 max-w-xl">
               <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
-                <div className="text-2xl font-bold">QR</div>
-                <div className="text-xs text-blue-100">Doğrulama</div>
+                <div className="text-2xl font-bold">PDF</div>
+                <div className="text-xs text-blue-100">Sertifika</div>
               </div>
               <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
-                <div className="text-2xl font-bold">7/24</div>
-                <div className="text-xs text-blue-100">Erişim</div>
+                <div className="text-2xl font-bold">QR</div>
+                <div className="text-xs text-blue-100">Doğrulama</div>
               </div>
               <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
                 <div className="text-2xl font-bold">SSL</div>
@@ -161,7 +164,7 @@ export default function Home() {
                       <strong>{date}</strong>
                     </div>
 
-                    <div className="flex justify-between gap-4 items-center">
+                    <div className="flex justify-between gap-4 items-center border-b pb-3">
                       <span className="text-slate-500">Durum</span>
                       <strong
                         className={`px-3 py-1 rounded-full text-xs ${
@@ -175,6 +178,26 @@ export default function Home() {
                         {statusText(status)}
                       </strong>
                     </div>
+
+                    {pdfUrl && (
+                      <div className="grid grid-cols-2 gap-3 pt-2">
+                        <a
+                          href={pdfUrl}
+                          target="_blank"
+                          className="text-center bg-blue-700 text-white p-3 rounded-xl font-bold"
+                        >
+                          PDF Görüntüle
+                        </a>
+
+                        <a
+                          href={pdfUrl}
+                          download
+                          className="text-center bg-slate-900 text-white p-3 rounded-xl font-bold"
+                        >
+                          PDF İndir
+                        </a>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -185,9 +208,9 @@ export default function Home() {
 
       <section className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-6">
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-          <h4 className="text-xl font-black mb-2">Anlık Sorgulama</h4>
+          <h4 className="text-xl font-black mb-2">PDF Sertifika</h4>
           <p className="text-slate-500">
-            Belgeler Firebase veritabanından canlı olarak kontrol edilir.
+            Her belgeye PDF sertifika bağlanabilir ve doğrulama sonucunda görüntülenebilir.
           </p>
         </div>
 
@@ -199,9 +222,9 @@ export default function Home() {
         </div>
 
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-          <h4 className="text-xl font-black mb-2">Kurumsal Görünüm</h4>
+          <h4 className="text-xl font-black mb-2">Kurumsal Güven</h4>
           <p className="text-slate-500">
-            Müşteriye güven veren sade ve profesyonel doğrulama ekranı.
+            Müşteriye güven veren profesyonel doğrulama ekranı.
           </p>
         </div>
       </section>
