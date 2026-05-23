@@ -23,7 +23,7 @@ export default function AdminPage() {
   const [documents, setDocuments] = useState<any[]>([]);
 
   const adminPassword = "428260428260murat";
-  const siteUrl = "https://wqe-system.vercel.app";
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "";
 
   const loadDocuments = async () => {
     const querySnapshot = await getDocs(collection(db, "documents"));
