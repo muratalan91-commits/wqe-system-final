@@ -19,6 +19,7 @@ export default function AdminPage() {
   const [name, setName] = useState("");
   const [owner, setOwner] = useState("");
   const [date, setDate] = useState("");
+  const [status, setStatus] = useState("valid");
   const [message, setMessage] = useState("");
   const [documents, setDocuments] = useState<any[]>([]);
 
@@ -51,7 +52,7 @@ export default function AdminPage() {
       name,
       owner,
       date,
-      status: "valid",
+      status,
       createdAt: new Date()
     });
 
@@ -135,6 +136,15 @@ export default function AdminPage() {
             placeholder="Tarih: 23.05.2026"
             className="w-full p-4 rounded-xl bg-zinc-800 mb-4 outline-none"
           />
+          <select
+  value={status}
+  onChange={(e) => setStatus(e.target.value)}
+  className="w-full p-4 rounded-xl bg-zinc-800 mb-4 outline-none"
+>
+  <option value="valid">Geçerli</option>
+  <option value="expired">Süresi Doldu</option>
+  <option value="cancelled">İptal Edildi</option>
+</select>
 
           <button
             onClick={addDocument}
