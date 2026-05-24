@@ -122,13 +122,13 @@ export default function Home() {
           <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-2xl">
             <h3 className="text-3xl font-black mb-2">Belge Sorgula</h3>
             <p className="text-slate-500 mb-6">
-              Belge üzerindeki doğrulama kodunu giriniz.
+              sertifikanızın ön yüzünde yer alan doğrulama kodunu giriniz.
             </p>
 
             <input
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="Örn: WQE-002"
+              placeholder="Örn: WQA-002"
               className="w-full p-4 rounded-2xl bg-slate-100 border border-slate-200 outline-none mb-4 focus:border-blue-600"
             />
 
