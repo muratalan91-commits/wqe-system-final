@@ -14,6 +14,7 @@ export default function Home() {
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
+  const [siteUrl, setSiteUrl] = useState("");
 
   const statusText = (value: string) => {
     if (value === "valid") return "Geçerli";
@@ -58,6 +59,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setSiteUrl(window.location.origin);
     const params = new URLSearchParams(window.location.search);
     const qrCode = params.get("code");
 
@@ -256,7 +258,25 @@ export default function Home() {
                         {statusText(status)}
                       </strong>
                     </div>
+{documentName && siteUrl && (
+  <div className="mt-4 p-4 rounded-2xl bg-white border border-slate-200 text-center">
+    <div className="text-sm font-bold text-slate-600 mb-3">
+      QR Kod ile Doğrulama
+    </div>
 
+    <img
+      src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(
+        `${siteUrl}/?code=${code}`
+      )}`}
+      alt="Belge QR Kod"
+      className="mx-auto rounded-xl border p-2 bg-white"
+    />
+
+    <p className="text-xs text-slate-500 mt-3 break-all">
+      {`${siteUrl}/?code=${code}`}
+    </p>
+  </div>
+)}
                     {pdfUrl && (
                       <div className="grid grid-cols-2 gap-3 pt-2">
                         <a
