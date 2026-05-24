@@ -84,7 +84,7 @@ export default function Home() {
       WQE Belge Dijital
     </h1>
     <p className="text-sm text-slate-500">
-      Belge Doğrulama Sistemi
+      Dijital E-Belge Doğrulama Sistemi
     </p>
   </div>
 </div>
