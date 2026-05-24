@@ -122,7 +122,7 @@ export default function Home() {
           <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-2xl">
             <h3 className="text-3xl font-black mb-2">Belge Sorgula</h3>
             <p className="text-slate-500 mb-6">
-              sertifikanızın ön yüzünde yer alan doğrulama kodunu giriniz.
+              Sertifikanızın Ön Yüzünde Yer Alan Doğrulama Kodunu Giriniz.
             </p>
 
             <input
