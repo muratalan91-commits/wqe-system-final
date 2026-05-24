@@ -19,13 +19,13 @@ export default function AdminPage() {
 
   const [editingId, setEditingId] = useState("");
 
-
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [owner, setOwner] = useState("");
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [revizyontarihi, setRevizyontarihi] = useState("");
   const [status, setStatus] = useState("valid");
   const [pdfName, setPdfName] = useState("");
 
@@ -34,16 +34,16 @@ export default function AdminPage() {
   const [documents, setDocuments] = useState<any[]>([]);
   const [search, setSearch] = useState("");
 
-const totalDocuments = documents.length;
-const validDocuments = documents.filter((d) => d.status === "valid").length;
-const expiredDocuments = documents.filter((d) => d.status === "expired").length;
-const cancelledDocuments = documents.filter((d) => d.status === "cancelled").length;
+  const totalDocuments = documents.length;
+  const validDocuments = documents.filter((d) => d.status === "valid").length;
+  const expiredDocuments = documents.filter((d) => d.status === "expired").length;
+  const cancelledDocuments = documents.filter((d) => d.status === "cancelled").length;
 
-const filteredDocuments = documents.filter((item) =>
-  `${item.code} ${item.name} ${item.owner}`
-    .toLowerCase()
-    .includes(search.toLowerCase())
-);
+  const filteredDocuments = documents.filter((item) =>
+    `${item.code || ""} ${item.name || ""} ${item.owner || ""}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
 
   const adminPassword = "428260428260murat";
   const siteUrl = typeof window !== "undefined" ? window.location.origin : "";
@@ -61,6 +61,7 @@ const filteredDocuments = documents.filter((item) =>
     setAddress("");
     setDescription("");
     setDate("");
+    setRevizyontarihi("");
     setStatus("valid");
     setPdfName("");
   };
@@ -77,14 +78,14 @@ const filteredDocuments = documents.filter((item) =>
   };
 
   useEffect(() => {
-  const savedLogin = localStorage.getItem("wqe_admin_login");
+    const savedLogin = localStorage.getItem("wqe_admin_login");
 
-  if (savedLogin === "true") {
-    setIsLoggedIn(true);
-  }
+    if (savedLogin === "true") {
+      setIsLoggedIn(true);
+    }
 
-  loadDocuments();
-}, []);
+    loadDocuments();
+  }, []);
 
   const addDocument = async () => {
     if (!code || !name || !owner || !date) {
@@ -101,6 +102,7 @@ const filteredDocuments = documents.filter((item) =>
       address,
       description,
       date,
+      revizyontarihi,
       status,
       pdfUrl,
       createdAt: new Date(),
@@ -133,6 +135,7 @@ const filteredDocuments = documents.filter((item) =>
       address,
       description,
       date,
+      revizyontarihi,
       status,
       pdfUrl,
       updatedAt: new Date(),
@@ -153,6 +156,7 @@ const filteredDocuments = documents.filter((item) =>
     setAddress(item.address || "");
     setDescription(item.description || "");
     setDate(item.date || "");
+    setRevizyontarihi(item.revizyontarihi || "");
     setStatus(item.status || "valid");
 
     const pdfFileName = item.pdfUrl ? item.pdfUrl.split("/pdf/")[1] || "" : "";
@@ -184,11 +188,11 @@ const filteredDocuments = documents.filter((item) =>
 
           <button
             onClick={() => {
-             if (password === adminPassword) {
-  setIsLoggedIn(true);
-  localStorage.setItem("wqe_admin_login", "true");
-  setMessage("");
-} else {
+              if (password === adminPassword) {
+                setIsLoggedIn(true);
+                localStorage.setItem("wqe_admin_login", "true");
+                setMessage("");
+              } else {
                 setMessage("❌ Şifre yanlış");
               }
             }}
@@ -207,59 +211,58 @@ const filteredDocuments = documents.filter((item) =>
     <main className="min-h-screen bg-slate-950 text-white p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
         <div className="mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-  <div>
-    <h1 className="text-4xl font-black">WQE Admin Panel</h1>
-    <p className="text-slate-400 mt-2">
-      Belge ekle, düzenle, açıklama/adres gir, PDF dosya adı yaz ve QR doğrulama oluştur.
-    </p>
-  </div>
+          <div>
+            <h1 className="text-4xl font-black">WQE Admin Panel</h1>
+            <p className="text-slate-400 mt-2">
+              Belge ekle, düzenle, revizyon tarihi gir, PDF dosya adı yaz ve QR doğrulama oluştur.
+            </p>
+          </div>
 
-  <button
-    onClick={() => {
-      localStorage.removeItem("wqe_admin_login");
-      setIsLoggedIn(false);
-      setPassword("");
-      setMessage("Çıkış yapıldı");
-    }}
-    className="bg-red-600 hover:bg-red-700 px-5 py-3 rounded-xl font-bold"
-  >
-    Çıkış Yap
-  </button>
-</div>
-          
+          <button
+            onClick={() => {
+              localStorage.removeItem("wqe_admin_login");
+              setIsLoggedIn(false);
+              setPassword("");
+              setMessage("Çıkış yapıldı");
+            }}
+            className="bg-red-600 hover:bg-red-700 px-5 py-3 rounded-xl font-bold"
+          >
+            Çıkış Yap
+          </button>
+        </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-  <div className="bg-slate-900 p-5 rounded-3xl border border-white/10">
-    <div className="text-slate-400 text-sm">Toplam Belge</div>
-    <div className="text-3xl font-black mt-2">{totalDocuments}</div>
-  </div>
+          <div className="bg-slate-900 p-5 rounded-3xl border border-white/10">
+            <div className="text-slate-400 text-sm">Toplam Belge</div>
+            <div className="text-3xl font-black mt-2">{totalDocuments}</div>
+          </div>
 
-  <div className="bg-green-500/10 p-5 rounded-3xl border border-green-500/20">
-    <div className="text-green-300 text-sm">Geçerli</div>
-    <div className="text-3xl font-black mt-2">{validDocuments}</div>
-  </div>
+          <div className="bg-green-500/10 p-5 rounded-3xl border border-green-500/20">
+            <div className="text-green-300 text-sm">Geçerli</div>
+            <div className="text-3xl font-black mt-2">{validDocuments}</div>
+          </div>
 
-  <div className="bg-yellow-500/10 p-5 rounded-3xl border border-yellow-500/20">
-    <div className="text-yellow-300 text-sm">Süresi Dolan</div>
-    <div className="text-3xl font-black mt-2">{expiredDocuments}</div>
-  </div>
+          <div className="bg-yellow-500/10 p-5 rounded-3xl border border-yellow-500/20">
+            <div className="text-yellow-300 text-sm">Süresi Dolan</div>
+            <div className="text-3xl font-black mt-2">{expiredDocuments}</div>
+          </div>
 
-  <div className="bg-red-500/10 p-5 rounded-3xl border border-red-500/20">
-    <div className="text-red-300 text-sm">İptal Edilen</div>
-    <div className="text-3xl font-black mt-2">{cancelledDocuments}</div>
-  </div>
-</div>
+          <div className="bg-red-500/10 p-5 rounded-3xl border border-red-500/20">
+            <div className="text-red-300 text-sm">İptal Edilen</div>
+            <div className="text-3xl font-black mt-2">{cancelledDocuments}</div>
+          </div>
+        </div>
 
-<div className="bg-slate-900 p-5 rounded-3xl mb-8 border border-white/10">
-  <h2 className="text-2xl font-black mb-3">Kurumsal Dashboard</h2>
+        <div className="bg-slate-900 p-5 rounded-3xl mb-8 border border-white/10">
+          <h2 className="text-2xl font-black mb-3">Kurumsal Dashboard</h2>
 
-  <input
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    placeholder="Belge kodu, ad veya firma ara..."
-    className="w-full p-4 rounded-xl bg-slate-800 outline-none border border-white/10"
-  />
-</div>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Belge kodu, ad veya firma ara..."
+            className="w-full p-4 rounded-xl bg-slate-800 outline-none border border-white/10"
+          />
+        </div>
 
         <div className="bg-slate-900 p-6 rounded-3xl mb-8 border border-white/10">
           {editingId && (
@@ -307,6 +310,13 @@ const filteredDocuments = documents.filter((item) =>
             value={date}
             onChange={(e) => setDate(e.target.value)}
             placeholder="Tarih"
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
+          />
+
+          <input
+            value={revizyontarihi}
+            onChange={(e) => setRevizyontarihi(e.target.value)}
+            placeholder="Revizyon tarihi"
             className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
           />
 
@@ -378,7 +388,7 @@ const filteredDocuments = documents.filter((item) =>
         </div>
 
         <div className="space-y-4">
-{filteredDocuments.map((item) => (
+          {filteredDocuments.map((item) => (
             <div
               key={item.id}
               className="bg-slate-900 p-5 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 border border-white/10"
@@ -400,7 +410,13 @@ const filteredDocuments = documents.filter((item) =>
                   </div>
                 )}
 
-                <div className="text-slate-400 mt-2">{item.date}</div>
+                <div className="text-slate-400 mt-2">Tarih: {item.date}</div>
+
+                {item.revizyontarihi && (
+                  <div className="text-slate-400 mt-1">
+                    Revizyon tarihi: {item.revizyontarihi}
+                  </div>
+                )}
 
                 {item.pdfUrl && (
                   <a
