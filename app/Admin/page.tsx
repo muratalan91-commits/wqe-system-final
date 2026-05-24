@@ -19,6 +19,7 @@ export default function AdminPage() {
 
   const [editingId, setEditingId] = useState("");
 
+
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [owner, setOwner] = useState("");
@@ -76,8 +77,14 @@ const filteredDocuments = documents.filter((item) =>
   };
 
   useEffect(() => {
-    loadDocuments();
-  }, []);
+  const savedLogin = localStorage.getItem("wqe_admin_login");
+
+  if (savedLogin === "true") {
+    setIsLoggedIn(true);
+  }
+
+  loadDocuments();
+}, []);
 
   const addDocument = async () => {
     if (!code || !name || !owner || !date) {
@@ -177,9 +184,11 @@ const filteredDocuments = documents.filter((item) =>
 
           <button
             onClick={() => {
-              if (password === adminPassword) {
-                setIsLoggedIn(true);
-              } else {
+             if (password === adminPassword) {
+  setIsLoggedIn(true);
+  localStorage.setItem("wqe_admin_login", "true");
+  setMessage("");
+} else {
                 setMessage("❌ Şifre yanlış");
               }
             }}
@@ -197,11 +206,27 @@ const filteredDocuments = documents.filter((item) =>
   return (
     <main className="min-h-screen bg-slate-950 text-white p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-10">
-          <h1 className="text-4xl font-black">WQE Admin Panel</h1>
-          <p className="text-slate-400 mt-2">
-            Belge ekle, düzenle, açıklama/adres gir, PDF dosya adı yaz ve QR doğrulama oluştur.
-          </p>
+        <div className="mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+  <div>
+    <h1 className="text-4xl font-black">WQE Admin Panel</h1>
+    <p className="text-slate-400 mt-2">
+      Belge ekle, düzenle, açıklama/adres gir, PDF dosya adı yaz ve QR doğrulama oluştur.
+    </p>
+  </div>
+
+  <button
+    onClick={() => {
+      localStorage.removeItem("wqe_admin_login");
+      setIsLoggedIn(false);
+      setPassword("");
+      setMessage("Çıkış yapıldı");
+    }}
+    className="bg-red-600 hover:bg-red-700 px-5 py-3 rounded-xl font-bold"
+  >
+    Çıkış Yap
+  </button>
+</div>
+          
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
