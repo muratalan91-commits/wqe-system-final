@@ -41,6 +41,7 @@ export default function Home() {
       address: "Adres",
       description: "Belge açıklaması",
       date: "Tarih",
+      revisionDate: "Revizyon tarihi",
       status: "Durum",
       valid: "Geçerli",
       expired: "Süresi Doldu",
@@ -86,6 +87,7 @@ export default function Home() {
       address: "Address",
       description: "Document description",
       date: "Date",
+      revisionDate: "Revision date",
       status: "Status",
       valid: "Valid",
       expired: "Expired",
@@ -171,9 +173,22 @@ export default function Home() {
     <main className="min-h-screen bg-[#f5f8ff] text-slate-900">
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-5 flex justify-between items-center gap-3">
-          <div className="flex items-center gap-3">
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/";
+            }}
+            className="flex items-center gap-3 cursor-pointer"
+          >
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-700 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-700/30">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" className="text-white">
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="text-white"
+              >
                 <path
                   d="M12 2L4 5.5V11C4 16.2 7.4 20.9 12 22C16.6 20.9 20 16.2 20 11V5.5L12 2Z"
                   fill="currentColor"
@@ -197,7 +212,7 @@ export default function Home() {
                 {t[lang].subtitle}
               </p>
             </div>
-          </div>
+          </a>
 
           <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
             <a href="#sorgula" className="hover:text-blue-700">
@@ -215,7 +230,9 @@ export default function Home() {
             <button
               onClick={() => setLang("tr")}
               className={`px-3 py-1 rounded-full text-xs font-bold ${
-                lang === "tr" ? "bg-blue-700 text-white" : "bg-slate-100 text-slate-600"
+                lang === "tr"
+                  ? "bg-blue-700 text-white"
+                  : "bg-slate-100 text-slate-600"
               }`}
             >
               TR
@@ -224,7 +241,9 @@ export default function Home() {
             <button
               onClick={() => setLang("en")}
               className={`px-3 py-1 rounded-full text-xs font-bold ${
-                lang === "en" ? "bg-blue-700 text-white" : "bg-slate-100 text-slate-600"
+                lang === "en"
+                  ? "bg-blue-700 text-white"
+                  : "bg-slate-100 text-slate-600"
               }`}
             >
               EN
@@ -287,9 +306,7 @@ export default function Home() {
                 {t[lang].verifyTitle}
               </h3>
 
-              <p className="text-slate-500">
-                {t[lang].verifyDesc}
-              </p>
+              <p className="text-slate-500">{t[lang].verifyDesc}</p>
             </div>
 
             <input
@@ -331,14 +348,15 @@ export default function Home() {
                       <span className="text-slate-500">{t[lang].owner}</span>
                       <strong className="text-right">{owner}</strong>
                     </div>
-{revizyontarihi && (
-  <div className="flex justify-between gap-4 border-b pb-2">
-    <span className="text-slate-500">
-      {lang === "tr" ? "Revizyon tarihi" : "Revision date"}
-    </span>
-    <strong>{revizyontarihi}</strong>
-  </div>
-)}
+
+                    {revizyontarihi && (
+                      <div className="flex justify-between gap-4 border-b pb-2">
+                        <span className="text-slate-500">
+                          {t[lang].revisionDate}
+                        </span>
+                        <strong>{revizyontarihi}</strong>
+                      </div>
+                    )}
 
                     {address && (
                       <div className="border-b pb-2">
@@ -462,109 +480,7 @@ export default function Home() {
           <p className="text-slate-500 text-lg md:text-xl max-w-3xl mx-auto mb-16 leading-relaxed">
             {t[lang].trustedDesc}
           </p>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-7 mb-20">
-            {[
-              ["10.000+", t[lang].verifiedDocs],
-              ["500+", t[lang].registeredCompany],
-              ["7/24", t[lang].access],
-              ["%100", t[lang].secureInfra],
-            ].map((item) => (
-              <div
-                key={item[0]}
-                className="bg-white rounded-3xl p-8 shadow-[0_8px_24px_rgba(15,23,42,0.08)] border border-slate-200"
-              >
-                <div className="text-4xl md:text-5xl font-semibold tracking-widest text-[#183c68] mb-3">
-                  {item[0]}
-                </div>
-                <div className="text-slate-500 text-lg">{item[1]}</div>
-              </div>
-            ))}
-          </div>
-
-          <h4 className="text-3xl font-semibold text-[#183c68] mb-9">
-            {t[lang].docTypes}
-          </h4>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
-            {(lang === "tr"
-              ? ["Çalışan Sertifikaları", "Eğitim Belgeleri", "Yetkinlik Belgeleri", "Katılım Sertifikaları"]
-              : ["Employee Certificates", "Training Documents", "Competency Documents", "Participation Certificates"]
-            ).map((item) => (
-              <div
-                key={item}
-                className="bg-white rounded-2xl p-5 shadow-[0_6px_18px_rgba(15,23,42,0.08)] border border-slate-200 flex items-center gap-3 text-left text-slate-700 font-medium"
-              >
-                <span className="w-6 h-6 rounded-full border-2 border-[#183c68] text-[#183c68] flex items-center justify-center text-sm font-bold">
-                  ✓
-                </span>
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
         </div>
-      </section>
-
-      <section id="nasil-calisir" className="max-w-7xl mx-auto px-6 py-16">
-        <div className="text-center mb-10">
-          <h3 className="text-3xl md:text-4xl font-black text-slate-900">
-            {t[lang].how}
-          </h3>
-          <p className="text-slate-500 mt-3">
-            {lang === "tr"
-              ? "Belge doğrulama işlemi üç basit adımda tamamlanır."
-              : "Document verification is completed in three simple steps."}
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {(lang === "tr"
-            ? [
-                ["1", "Belge Kodunu Gir", "Sertifika üzerinde yer alan doğrulama kodunu sorgulama alanına yazın."],
-                ["2", "Sistemde Kontrol Edilir", "Kod Firebase veritabanında anlık olarak kontrol edilir."],
-                ["3", "Sonucu Görüntüle", "Belge durumu, firma bilgisi ve PDF sertifika bağlantısı ekrana gelir."],
-              ]
-            : [
-                ["1", "Enter Document Code", "Enter the verification code shown on the certificate."],
-                ["2", "System Checks It", "The code is checked instantly in the Firebase database."],
-                ["3", "View Result", "Document status, company information and PDF certificate link are displayed."],
-              ]
-          ).map((item) => (
-            <div
-              key={item[0]}
-              className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xl mb-4">
-                {item[0]}
-              </div>
-              <h4 className="text-xl font-black mb-2">{item[1]}</h4>
-              <p className="text-slate-500">{item[2]}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="ozellikler" className="max-w-7xl mx-auto px-6 pb-16 grid md:grid-cols-3 gap-6">
-        {(lang === "tr"
-          ? [
-              ["PDF Sertifika", "Online olan her belgenin PDF sertifikası indirilebilir ve doğrulama sonucunda görüntülenebilir."],
-              ["QR Kod Desteği", "QR kod okutulduğunda belge otomatik olarak doğrulanır."],
-              ["Kurumsal Güven", "Müşteriye güven veren profesyonel dijital doğrulama ekranı."],
-            ]
-          : [
-              ["PDF Certificate", "The PDF certificate of each online document can be viewed and downloaded after verification."],
-              ["QR Code Support", "When the QR code is scanned, the document is automatically verified."],
-              ["Corporate Trust", "A professional digital verification screen that builds customer confidence."],
-            ]
-        ).map((item) => (
-          <div
-            key={item[0]}
-            className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-          >
-            <h4 className="text-xl font-black mb-2">{item[0]}</h4>
-            <p className="text-slate-500">{item[1]}</p>
-          </div>
-        ))}
       </section>
 
       <footer className="bg-slate-950 text-slate-400 py-6">
