@@ -335,17 +335,19 @@ export default function Home() {
                       <strong className="text-right">{documentName}</strong>
                     </div>
 
-                    <div className="flex justify-between gap-4 border-b pb-2">
-                      <span className="text-slate-500">{t[lang].owner}</span>
-                      <strong className="text-right">{owner}</strong>
-                    </div>
-
                     {revizyontarihi && (
-                      <div className="flex justify-between gap-4 border-b pb-2">
-                        <span className="text-slate-500">{t[lang].revisionDate}</span>
-                        <strong>{revizyontarihi}</strong>
-                      </div>
-                    )}
+  <div className="flex justify-between gap-4 border-b pb-2">
+    <span className="text-slate-500">
+      {t[lang].revisionDate}
+    </span>
+    <strong>{revizyontarihi}</strong>
+  </div>
+)}
+
+<div className="flex justify-between gap-4 border-b pb-2">
+  <span className="text-slate-500">{t[lang].date}</span>
+  <strong>{date}</strong>
+</div>
 
                     {address && (
                       <div className="border-b pb-2">
