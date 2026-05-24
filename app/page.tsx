@@ -104,7 +104,60 @@ export default function Home() {
               </p>
             </div>
           </div>
+<section className="bg-[#f3f7fc] py-20">
+  <div className="max-w-7xl mx-auto px-6 text-center">
+    <h3 className="text-4xl md:text-5xl font-semibold text-[#183c68] mb-5">
+      Güvenilir Belge Doğrulama
+    </h3>
 
+    <p className="text-slate-500 text-lg md:text-xl max-w-3xl mx-auto mb-16 leading-relaxed">
+      WQE Belge Dijital, kurumunuzun çıkardığı belgelerin güvenilirliğini dijital
+      ortamda tescil eder.
+    </p>
+
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-7 mb-20">
+      {[
+        ["10.000+", "Doğrulanan Belge"],
+        ["500+", "Kayıtlı Kurum"],
+        ["7/24", "Erişim İmkânı"],
+        ["%100", "Güvenli Altyapı"],
+      ].map((item) => (
+        <div
+          key={item[0]}
+          className="bg-white rounded-3xl p-8 shadow-[0_8px_24px_rgba(15,23,42,0.08)] border border-slate-200"
+        >
+          <div className="text-4xl md:text-5xl font-semibold tracking-widest text-[#183c68] mb-3">
+            {item[0]}
+          </div>
+          <div className="text-slate-500 text-lg">{item[1]}</div>
+        </div>
+      ))}
+    </div>
+
+    <h4 className="text-3xl font-semibold text-[#183c68] mb-9">
+      Belge Türleri
+    </h4>
+
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+      {[
+        "Çalışan Sertifikaları",
+        "Eğitim Belgeleri",
+        "Yetkinlik Belgeleri",
+        "Katılım Sertifikaları",
+      ].map((item) => (
+        <div
+          key={item}
+          className="bg-white rounded-2xl p-5 shadow-[0_6px_18px_rgba(15,23,42,0.08)] border border-slate-200 flex items-center gap-3 text-left text-slate-700 font-medium"
+        >
+          <span className="w-6 h-6 rounded-full border-2 border-[#183c68] text-[#183c68] flex items-center justify-center text-sm font-bold">
+            ✓
+          </span>
+          <span>{item}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
           <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
             <a href="#sorgula" className="hover:text-blue-700">
               Sorgula
