@@ -31,6 +31,18 @@ export default function AdminPage() {
   const [message, setMessage] = useState("");
   const [verifyLink, setVerifyLink] = useState("");
   const [documents, setDocuments] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
+
+const totalDocuments = documents.length;
+const validDocuments = documents.filter((d) => d.status === "valid").length;
+const expiredDocuments = documents.filter((d) => d.status === "expired").length;
+const cancelledDocuments = documents.filter((d) => d.status === "cancelled").length;
+
+const filteredDocuments = documents.filter((item) =>
+  `${item.code} ${item.name} ${item.owner}`
+    .toLowerCase()
+    .includes(search.toLowerCase())
+);
 
   const adminPassword = "428260428260murat";
   const siteUrl = typeof window !== "undefined" ? window.location.origin : "";
@@ -192,9 +204,38 @@ export default function AdminPage() {
           </p>
         </div>
 
-        <div className="bg-slate-900 p-4 rounded-2xl mb-6 border border-white/10">
-          Toplam belge sayısı: <strong>{documents.length}</strong>
-        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div className="bg-slate-900 p-5 rounded-3xl border border-white/10">
+    <div className="text-slate-400 text-sm">Toplam Belge</div>
+    <div className="text-3xl font-black mt-2">{totalDocuments}</div>
+  </div>
+
+  <div className="bg-green-500/10 p-5 rounded-3xl border border-green-500/20">
+    <div className="text-green-300 text-sm">Geçerli</div>
+    <div className="text-3xl font-black mt-2">{validDocuments}</div>
+  </div>
+
+  <div className="bg-yellow-500/10 p-5 rounded-3xl border border-yellow-500/20">
+    <div className="text-yellow-300 text-sm">Süresi Dolan</div>
+    <div className="text-3xl font-black mt-2">{expiredDocuments}</div>
+  </div>
+
+  <div className="bg-red-500/10 p-5 rounded-3xl border border-red-500/20">
+    <div className="text-red-300 text-sm">İptal Edilen</div>
+    <div className="text-3xl font-black mt-2">{cancelledDocuments}</div>
+  </div>
+</div>
+
+<div className="bg-slate-900 p-5 rounded-3xl mb-8 border border-white/10">
+  <h2 className="text-2xl font-black mb-3">Kurumsal Dashboard</h2>
+
+  <input
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    placeholder="Belge kodu, ad veya firma ara..."
+    className="w-full p-4 rounded-xl bg-slate-800 outline-none border border-white/10"
+  />
+</div>
 
         <div className="bg-slate-900 p-6 rounded-3xl mb-8 border border-white/10">
           {editingId && (
@@ -313,7 +354,7 @@ export default function AdminPage() {
         </div>
 
         <div className="space-y-4">
-          {documents.map((item) => (
+{filteredDocuments.map((item) => (
             <div
               key={item.id}
               className="bg-slate-900 p-5 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4 border border-white/10"
