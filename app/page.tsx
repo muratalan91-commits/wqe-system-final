@@ -369,8 +369,8 @@ export default function Home() {
 
       <footer className="bg-slate-950 text-slate-400 py-6">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-3 text-sm">
-          <span>© 2026 WQE-Belge Dijital</span>
-          <span>Belge Doğrulama Sistemi</span>
+          <span>© 2002 WQE-Belge Dijital</span>
+          <span>Uluslararası Dijital Belge Doğrulama Sistemi</span>
         </div>
       </footer>
     </main>
