@@ -19,6 +19,8 @@ export default function AdminPage() {
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [owner, setOwner] = useState("");
+  const [address, setAddress] = useState("");
+  const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("valid");
   const [pdfName, setPdfName] = useState("");
@@ -28,19 +30,14 @@ export default function AdminPage() {
   const [documents, setDocuments] = useState<any[]>([]);
 
   const adminPassword = "428260428260murat";
-
-  const siteUrl =
-    typeof window !== "undefined" ? window.location.origin : "";
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "";
 
   const loadDocuments = async () => {
     const querySnapshot = await getDocs(collection(db, "documents"));
     const docs: any[] = [];
 
     querySnapshot.forEach((item) => {
-      docs.push({
-        id: item.id,
-        ...item.data(),
-      });
+      docs.push({ id: item.id, ...item.data() });
     });
 
     setDocuments(docs);
@@ -52,7 +49,7 @@ export default function AdminPage() {
 
   const addDocument = async () => {
     if (!code || !name || !owner || !date) {
-      setMessage("❌ Tüm alanları doldur");
+      setMessage("❌ Belge kodu, belge adı, firma/kişi ve tarih zorunlu");
       return;
     }
 
@@ -66,6 +63,8 @@ export default function AdminPage() {
       code,
       name,
       owner,
+      address,
+      description,
       date,
       status,
       pdfUrl,
@@ -78,6 +77,8 @@ export default function AdminPage() {
     setCode("");
     setName("");
     setOwner("");
+    setAddress("");
+    setDescription("");
     setDate("");
     setStatus("valid");
     setPdfName("");
@@ -129,9 +130,8 @@ export default function AdminPage() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-10">
           <h1 className="text-4xl font-black">WQE Admin Panel</h1>
-
           <p className="text-slate-400 mt-2">
-            Belge ekle, PDF dosya adı gir ve QR doğrulama oluştur.
+            Belge ekle, açıklama/adres gir, PDF dosya adı yaz ve QR doğrulama oluştur.
           </p>
         </div>
 
@@ -161,6 +161,20 @@ export default function AdminPage() {
             className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none"
           />
 
+          <textarea
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Adres"
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none min-h-[90px]"
+          />
+
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Belge açıklaması"
+            className="w-full p-4 rounded-xl bg-slate-800 mb-4 outline-none min-h-[120px]"
+          />
+
           <input
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -187,13 +201,12 @@ export default function AdminPage() {
               type="text"
               value={pdfName}
               onChange={(e) => setPdfName(e.target.value)}
-              placeholder="Örn: sertifika.pdf"
+              placeholder="Örn: WATERSEAGOLDSEAL.pdf"
               className="w-full p-4 rounded-xl bg-slate-800 outline-none"
             />
 
             <div className="mt-2 text-xs text-slate-400">
-              PDF dosyasını proje içinde public/pdf klasörüne koyun. Buraya
-              sadece dosya adını yazın.
+              PDF dosyasını proje içinde public/pdf klasörüne koyun. Buraya sadece dosya adını yazın.
             </div>
           </div>
 
@@ -223,7 +236,13 @@ export default function AdminPage() {
                 <div className="text-xl font-black">{item.code}</div>
                 <div>{item.name}</div>
                 <div className="text-slate-400">{item.owner}</div>
-                <div className="text-slate-400">{item.date}</div>
+                {item.address && (
+                  <div className="text-slate-500 text-sm mt-1">{item.address}</div>
+                )}
+                {item.description && (
+                  <div className="text-slate-300 text-sm mt-2">{item.description}</div>
+                )}
+                <div className="text-slate-400 mt-2">{item.date}</div>
 
                 {item.pdfUrl && (
                   <a
