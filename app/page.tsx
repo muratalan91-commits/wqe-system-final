@@ -342,7 +342,7 @@ export default function Home() {
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
           <h4 className="text-xl font-black mb-2">Kurumsal Güven</h4>
           <p className="text-slate-500">
-            Müşteriye güven veren profesyonel doğrulama ekranı.
+            Müşteriye güven veren profesyonel dijital doğrulama ekranı.
           </p>
         </div>
       </section>
