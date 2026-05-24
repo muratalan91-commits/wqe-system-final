@@ -15,6 +15,42 @@ export default function Home() {
   const [status, setStatus] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
   const [siteUrl, setSiteUrl] = useState("");
+  const [lang, setLang] = useState<"tr" | "en">("tr");
+
+const t = {
+  tr: {
+    subtitle: "Dijital E-Belge Doğrulama Sistemi",
+    query: "Sorgula",
+    how: "Nasıl Çalışır?",
+    features: "Özellikler",
+    login: "GİRİŞ",
+    badge: "Güvenli Dijital Doğrulama",
+    heroTitle: "Belgelerinizi anında ve güvenli şekilde doğrulayın.",
+    heroDesc:
+      "Belge kodu veya QR kod ile sistemde kayıtlı belgelerin geçerliliğini hızlı, güvenli ve kurumsal şekilde kontrol edin.",
+    verifyTitle: "Belge Sorgula",
+    verifyDesc:
+      "Sertifikanızın ön yüzünde yer alan doğrulama kodunu giriniz.",
+    verifyButton: "Belgeyi Doğrula",
+  },
+
+  
+  en: {
+  subtitle: "Digital E-Document Verification System",
+  query: "Verify",
+  how: "How It Works",
+  features: "Features",
+  login: "LOGIN",
+  badge: "Secure Digital Verification",
+  heroTitle: "Verify your documents instantly and securely.",
+  heroDesc:
+    "Check registered documents quickly and securely using a document code or QR code.",
+  verifyTitle: "Document Verification",
+  verifyDesc:
+    "Enter the verification code shown on your certificate.",
+  verifyButton: "Verify Document",
+},
+};
 
   const statusText = (value: string) => {
     if (value === "valid") return "Geçerli";
@@ -118,6 +154,25 @@ export default function Home() {
               Özellikler
             </a>
           </div>
+<div className="flex gap-2">
+  <button
+    onClick={() => setLang("tr")}
+    className={`px-3 py-1 rounded-full text-xs font-bold ${
+      lang === "tr" ? "bg-blue-700 text-white" : "bg-slate-100 text-slate-600"
+    }`}
+  >
+    TR
+  </button>
+
+  <button
+    onClick={() => setLang("en")}
+    className={`px-3 py-1 rounded-full text-xs font-bold ${
+      lang === "en" ? "bg-blue-700 text-white" : "bg-slate-100 text-slate-600"
+    }`}
+  >
+    EN
+  </button>
+</div>
 
           <a
             href="/Admin"
