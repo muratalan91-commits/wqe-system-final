@@ -10,11 +10,14 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [editingId, setEditingId] = useState("");
 
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
@@ -31,6 +34,23 @@ export default function AdminPage() {
 
   const adminPassword = "428260428260murat";
   const siteUrl = typeof window !== "undefined" ? window.location.origin : "";
+
+  const makePdfUrl = () => {
+    const cleanPdfName = pdfName.trim();
+    return cleanPdfName ? `${window.location.origin}/pdf/${cleanPdfName}` : "";
+  };
+
+  const clearForm = () => {
+    setEditingId("");
+    setCode("");
+    setName("");
+    setOwner("");
+    setAddress("");
+    setDescription("");
+    setDate("");
+    setStatus("valid");
+    setPdfName("");
+  };
 
   const loadDocuments = async () => {
     const querySnapshot = await getDocs(collection(db, "documents"));
@@ -53,11 +73,7 @@ export default function AdminPage() {
       return;
     }
 
-    const cleanPdfName = pdfName.trim();
-
-    const pdfUrl = cleanPdfName
-      ? `${window.location.origin}/pdf/${cleanPdfName}`
-      : "";
+    const pdfUrl = makePdfUrl();
 
     await addDoc(collection(db, "documents"), {
       code,
@@ -74,16 +90,57 @@ export default function AdminPage() {
     setVerifyLink(`${window.location.origin}/?code=${code}`);
     setMessage("✅ Belge başarıyla eklendi");
 
-    setCode("");
-    setName("");
-    setOwner("");
-    setAddress("");
-    setDescription("");
-    setDate("");
-    setStatus("valid");
-    setPdfName("");
-
+    clearForm();
     loadDocuments();
+  };
+
+  const updateDocument = async () => {
+    if (!editingId) {
+      setMessage("❌ Güncellenecek belge seçilmedi");
+      return;
+    }
+
+    if (!code || !name || !owner || !date) {
+      setMessage("❌ Belge kodu, belge adı, firma/kişi ve tarih zorunlu");
+      return;
+    }
+
+    const pdfUrl = makePdfUrl();
+
+    await updateDoc(doc(db, "documents", editingId), {
+      code,
+      name,
+      owner,
+      address,
+      description,
+      date,
+      status,
+      pdfUrl,
+      updatedAt: new Date(),
+    });
+
+    setVerifyLink(`${window.location.origin}/?code=${code}`);
+    setMessage("✅ Belge başarıyla güncellendi");
+
+    clearForm();
+    loadDocuments();
+  };
+
+  const startEdit = (item: any) => {
+    setEditingId(item.id || "");
+    setCode(item.code || "");
+    setName(item.name || "");
+    setOwner(item.owner || "");
+    setAddress(item.address || "");
+    setDescription(item.description || "");
+    setDate(item.date || "");
+    setStatus(item.status || "valid");
+
+    const pdfFileName = item.pdfUrl ? item.pdfUrl.split("/pdf/")[1] || "" : "";
+    setPdfName(pdfFileName);
+
+    setMessage("✏️ Düzenleme modu açıldı");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const deleteDocument = async (id: string) => {
@@ -131,7 +188,7 @@ export default function AdminPage() {
         <div className="mb-10">
           <h1 className="text-4xl font-black">WQE Admin Panel</h1>
           <p className="text-slate-400 mt-2">
-            Belge ekle, açıklama/adres gir, PDF dosya adı yaz ve QR doğrulama oluştur.
+            Belge ekle, düzenle, açıklama/adres gir, PDF dosya adı yaz ve QR doğrulama oluştur.
           </p>
         </div>
 
@@ -140,6 +197,12 @@ export default function AdminPage() {
         </div>
 
         <div className="bg-slate-900 p-6 rounded-3xl mb-8 border border-white/10">
+          {editingId && (
+            <div className="mb-4 p-4 rounded-xl bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">
+              ✏️ Düzenleme modundasın. Kaydı güncellemek için “Belge Güncelle” butonuna bas.
+            </div>
+          )}
+
           <input
             value={code}
             onChange={(e) => setCode(e.target.value)}
@@ -210,12 +273,35 @@ export default function AdminPage() {
             </div>
           </div>
 
-          <button
-            onClick={addDocument}
-            className="bg-blue-700 hover:bg-blue-800 px-6 py-4 rounded-xl font-bold"
-          >
-            Belge Ekle
-          </button>
+          <div className="flex flex-col sm:flex-row gap-3">
+            {editingId ? (
+              <>
+                <button
+                  onClick={updateDocument}
+                  className="bg-green-700 hover:bg-green-800 px-6 py-4 rounded-xl font-bold"
+                >
+                  Belge Güncelle
+                </button>
+
+                <button
+                  onClick={() => {
+                    clearForm();
+                    setMessage("Düzenleme iptal edildi");
+                  }}
+                  className="bg-slate-700 hover:bg-slate-600 px-6 py-4 rounded-xl font-bold"
+                >
+                  İptal Et
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={addDocument}
+                className="bg-blue-700 hover:bg-blue-800 px-6 py-4 rounded-xl font-bold"
+              >
+                Belge Ekle
+              </button>
+            )}
+          </div>
 
           {message && <div className="mt-4">{message}</div>}
 
@@ -236,12 +322,19 @@ export default function AdminPage() {
                 <div className="text-xl font-black">{item.code}</div>
                 <div>{item.name}</div>
                 <div className="text-slate-400">{item.owner}</div>
+
                 {item.address && (
-                  <div className="text-slate-500 text-sm mt-1">{item.address}</div>
+                  <div className="text-slate-500 text-sm mt-1 whitespace-pre-line">
+                    {item.address}
+                  </div>
                 )}
+
                 {item.description && (
-                  <div className="text-slate-300 text-sm mt-2">{item.description}</div>
+                  <div className="text-slate-300 text-sm mt-2 whitespace-pre-line">
+                    {item.description}
+                  </div>
                 )}
+
                 <div className="text-slate-400 mt-2">{item.date}</div>
 
                 {item.pdfUrl && (
@@ -259,16 +352,25 @@ export default function AdminPage() {
                 <QRCodeCanvas value={`${siteUrl}/?code=${item.code}`} size={90} />
               </div>
 
-              <button
-                onClick={() => {
-                  if (confirm("Bu belge silinsin mi?")) {
-                    deleteDocument(item.id);
-                  }
-                }}
-                className="bg-red-600 px-4 py-2 rounded-xl"
-              >
-                Sil
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => startEdit(item)}
+                  className="bg-yellow-600 px-4 py-2 rounded-xl"
+                >
+                  Düzenle
+                </button>
+
+                <button
+                  onClick={() => {
+                    if (confirm("Bu belge silinsin mi?")) {
+                      deleteDocument(item.id);
+                    }
+                  }}
+                  className="bg-red-600 px-4 py-2 rounded-xl"
+                >
+                  Sil
+                </button>
+              </div>
             </div>
           ))}
         </div>
