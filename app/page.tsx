@@ -9,6 +9,8 @@ export default function Home() {
   const [result, setResult] = useState("");
   const [documentName, setDocumentName] = useState("");
   const [owner, setOwner] = useState("");
+  const [address, setAddress] = useState("");
+  const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
@@ -35,6 +37,8 @@ export default function Home() {
       setResult("❌ Belge bulunamadı");
       setDocumentName("");
       setOwner("");
+      setAddress("");
+      setDescription("");
       setDate("");
       setStatus("");
       setPdfUrl("");
@@ -46,6 +50,8 @@ export default function Home() {
     setResult("✅ Belge geçerli");
     setDocumentName(data.name || "");
     setOwner(data.owner || "");
+    setAddress(data.address || "");
+    setDescription(data.description || "");
     setDate(data.date || "");
     setStatus(data.status || "valid");
     setPdfUrl(data.pdfUrl || "");
@@ -151,13 +157,27 @@ export default function Home() {
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between gap-4 border-b pb-2">
                       <span className="text-slate-500">Belge adı</span>
-                      <strong>{documentName}</strong>
+                      <strong className="text-right">{documentName}</strong>
                     </div>
 
                     <div className="flex justify-between gap-4 border-b pb-2">
                       <span className="text-slate-500">Firma / Kişi</span>
-                      <strong>{owner}</strong>
+                      <strong className="text-right">{owner}</strong>
                     </div>
+
+                    {address && (
+                      <div className="border-b pb-2">
+                        <div className="text-slate-500 mb-1">Adres</div>
+                        <div className="font-semibold whitespace-pre-line">{address}</div>
+                      </div>
+                    )}
+
+                    {description && (
+                      <div className="border-b pb-2">
+                        <div className="text-slate-500 mb-1">Belge açıklaması</div>
+                        <div className="font-semibold whitespace-pre-line">{description}</div>
+                      </div>
+                    )}
 
                     <div className="flex justify-between gap-4 border-b pb-2">
                       <span className="text-slate-500">Tarih</span>
@@ -210,7 +230,7 @@ export default function Home() {
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
           <h4 className="text-xl font-black mb-2">PDF Sertifika</h4>
           <p className="text-slate-500">
-            Her belgeye PDF sertifika bağlanabilir ve doğrulama sonucunda görüntülenebilir.
+            Online olan Her belgenin PDF sertifikası indirilebilir ve doğrulama sonucunda görüntülenebilir.
           </p>
         </div>
 
@@ -231,7 +251,7 @@ export default function Home() {
 
       <footer className="bg-slate-950 text-slate-400 py-6">
         <div className="max-w-7xl mx-auto px-6 flex justify-between text-sm">
-          <span>© 2026 WQE Belge Dijital</span>
+          <span>©️ 2002 WQE-Belge Dijital</span>
           <span>Belge Doğrulama Sistemi</span>
         </div>
       </footer>
