@@ -69,52 +69,71 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#f5f8ff] text-slate-900">
-      <header className="bg-white border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-          <div>
-            <div className="flex items-center gap-3">
-  <img
-    src="/logo.png"
-    alt="WQE Logo"
-    className="w-12 h-12 object-contain"
-  />
+          <div className="flex items-center gap-3">
+            <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-700 to-cyan-400 flex items-center justify-center overflow-hidden shadow-lg">
+              <img
+                src="/logo.png"
+                alt="WQE Logo"
+                className="absolute inset-0 w-full h-full object-contain bg-white"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+              <span className="text-white font-black text-lg">W</span>
+            </div>
 
-  <div>
-    <h1 className="text-2xl font-black text-blue-700">
-      WQE Belge Dijital
-    </h1>
-    <p className="text-sm text-slate-500">
-      Dijital E-Belge Doğrulama Sistemi
-    </p>
-  </div>
-</div>
+            <div>
+              <h1 className="text-2xl font-black text-blue-700">
+                WQE Belge Dijital
+              </h1>
+              <p className="text-sm text-slate-500">
+                Dijital E-Belge Doğrulama Sistemi
+              </p>
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-600">
+            <a href="#sorgula" className="hover:text-blue-700">
+              Sorgula
+            </a>
+            <a href="#nasil-calisir" className="hover:text-blue-700">
+              Nasıl Çalışır?
+            </a>
+            <a href="#ozellikler" className="hover:text-blue-700">
+              Özellikler
+            </a>
           </div>
 
           <a
             href="/Admin"
-            className="bg-blue-700 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-blue-800"
+            className="bg-blue-700 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-blue-800 shadow-lg shadow-blue-700/20"
           >
-            GİRİŞ 
+            GİRİŞ
           </a>
         </div>
       </header>
 
-      <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-slate-950 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#021B4E] via-[#003B8F] to-[#020617] text-white">
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,#60a5fa,transparent_35%)]" />
+        <div className="absolute top-[-200px] right-[-200px] w-[520px] h-[520px] bg-cyan-400/20 blur-3xl rounded-full" />
+        <div className="absolute bottom-[-220px] left-[-200px] w-[520px] h-[520px] bg-blue-500/20 blur-3xl rounded-full" />
 
         <div className="relative max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="inline-block bg-white/10 border border-white/20 px-4 py-2 rounded-full text-sm mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-full text-sm mb-6">
+              <span className="w-2 h-2 rounded-full bg-green-400" />
               Güvenli Dijital Doğrulama
             </div>
 
             <h2 className="text-4xl md:text-6xl font-black leading-tight mb-6">
-              Belgelerinizi anında doğrulayın.
+              Belgelerinizi anında ve güvenli şekilde doğrulayın.
             </h2>
 
             <p className="text-blue-100 text-lg mb-8 max-w-xl">
-              Belge kodu veya QR kod ile sistemde kayıtlı belgelerin geçerliliğini hızlı,
-              güvenli ve kurumsal şekilde kontrol edin.
+              Belge kodu veya QR kod ile sistemde kayıtlı belgelerin geçerliliğini
+              hızlı, güvenli ve kurumsal şekilde kontrol edin.
             </p>
 
             <div className="grid grid-cols-3 gap-4 max-w-xl">
@@ -133,11 +152,19 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-2xl">
-            <h3 className="text-3xl font-black mb-2">Belge Sorgula</h3>
-            <p className="text-slate-500 mb-6">
-              Sertifikanızın Ön Yüzünde Yer Alan Doğrulama Kodunu Giriniz.
-            </p>
+          <div
+            id="sorgula"
+            className="bg-white text-slate-900 rounded-[2rem] p-8 shadow-2xl border border-white/30"
+          >
+            <div className="mb-6">
+              <div className="text-sm font-bold text-blue-700 mb-2">
+                BELGE DOĞRULAMA
+              </div>
+              <h3 className="text-3xl font-black mb-2">Belge Sorgula</h3>
+              <p className="text-slate-500">
+                Sertifikanızın ön yüzünde yer alan doğrulama kodunu giriniz.
+              </p>
+            </div>
 
             <input
               value={code}
@@ -148,13 +175,13 @@ export default function Home() {
 
             <button
               onClick={() => verifyDocument()}
-              className="w-full bg-blue-700 hover:bg-blue-800 text-white p-4 rounded-2xl font-bold"
+              className="w-full bg-blue-700 hover:bg-blue-800 text-white p-4 rounded-2xl font-bold transition shadow-lg shadow-blue-700/20"
             >
               Belgeyi Doğrula
             </button>
 
             {result && (
-              <div className="mt-6 border border-slate-200 rounded-2xl p-5 bg-slate-50">
+              <div className="mt-6 border border-slate-200 rounded-2xl p-5 bg-gradient-to-br from-white to-slate-100 shadow-inner">
                 <div
                   className={`text-2xl font-black mb-4 ${
                     result.includes("✅")
@@ -182,14 +209,20 @@ export default function Home() {
                     {address && (
                       <div className="border-b pb-2">
                         <div className="text-slate-500 mb-1">Adres</div>
-                        <div className="font-semibold whitespace-pre-line">{address}</div>
+                        <div className="font-semibold whitespace-pre-line">
+                          {address}
+                        </div>
                       </div>
                     )}
 
                     {description && (
                       <div className="border-b pb-2">
-                        <div className="text-slate-500 mb-1">Belge açıklaması</div>
-                        <div className="font-semibold whitespace-pre-line">{description}</div>
+                        <div className="text-slate-500 mb-1">
+                          Belge açıklaması
+                        </div>
+                        <div className="font-semibold whitespace-pre-line">
+                          {description}
+                        </div>
                       </div>
                     )}
 
@@ -240,22 +273,73 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-          <h4 className="text-xl font-black mb-2">PDF Sertifika</h4>
-          <p className="text-slate-500">
-            Online olan Her belgenin PDF sertifikası indirilebilir ve doğrulama sonucunda görüntülenebilir.
+      <section className="bg-white border-y border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-5 grid md:grid-cols-4 gap-6 text-center">
+          <div>
+            <div className="text-3xl font-black text-blue-700">24/7</div>
+            <div className="text-slate-500 text-sm">Kesintisiz Doğrulama</div>
+          </div>
+          <div>
+            <div className="text-3xl font-black text-blue-700">SSL</div>
+            <div className="text-slate-500 text-sm">Güvenli Altyapı</div>
+          </div>
+          <div>
+            <div className="text-3xl font-black text-blue-700">QR</div>
+            <div className="text-slate-500 text-sm">Hızlı Sorgulama</div>
+          </div>
+          <div>
+            <div className="text-3xl font-black text-blue-700">PDF</div>
+            <div className="text-slate-500 text-sm">Dijital Sertifika</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="nasil-calisir" className="max-w-7xl mx-auto px-6 py-16">
+        <div className="text-center mb-10">
+          <h3 className="text-3xl md:text-4xl font-black text-slate-900">
+            Nasıl Çalışır?
+          </h3>
+          <p className="text-slate-500 mt-3">
+            Belge doğrulama işlemi üç basit adımda tamamlanır.
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            ["1", "Belge Kodunu Gir", "Sertifika üzerinde yer alan doğrulama kodunu sorgulama alanına yazın."],
+            ["2", "Sistemde Kontrol Edilir", "Kod Firebase veritabanında anlık olarak kontrol edilir."],
+            ["3", "Sonucu Görüntüle", "Belge durumu, firma bilgisi ve PDF sertifika bağlantısı ekrana gelir."],
+          ].map((item) => (
+            <div
+              key={item[0]}
+              className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-xl mb-4">
+                {item[0]}
+              </div>
+              <h4 className="text-xl font-black mb-2">{item[1]}</h4>
+              <p className="text-slate-500">{item[2]}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="ozellikler" className="max-w-7xl mx-auto px-6 pb-16 grid md:grid-cols-3 gap-6">
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+          <h4 className="text-xl font-black mb-2">PDF Sertifika</h4>
+          <p className="text-slate-500">
+            Online olan her belgenin PDF sertifikası indirilebilir ve doğrulama sonucunda görüntülenebilir.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
           <h4 className="text-xl font-black mb-2">QR Kod Desteği</h4>
           <p className="text-slate-500">
             QR kod okutulduğunda belge otomatik olarak doğrulanır.
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
           <h4 className="text-xl font-black mb-2">Kurumsal Güven</h4>
           <p className="text-slate-500">
             Müşteriye güven veren profesyonel doğrulama ekranı.
@@ -263,9 +347,29 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="max-w-7xl mx-auto px-6 pb-16">
+        <div className="rounded-[2rem] bg-gradient-to-r from-blue-800 to-slate-950 text-white p-8 md:p-10 flex flex-col md:flex-row justify-between gap-6 items-start md:items-center">
+          <div>
+            <h3 className="text-3xl font-black mb-2">
+              Dijital doğrulama altyapınız hazır.
+            </h3>
+            <p className="text-blue-100">
+              Belgelerinizi QR kod, PDF ve online doğrulama ile güvenli şekilde sunun.
+            </p>
+          </div>
+
+          <a
+            href="#sorgula"
+            className="bg-white text-blue-800 px-6 py-3 rounded-full font-black"
+          >
+            Belge Sorgula
+          </a>
+        </div>
+      </section>
+
       <footer className="bg-slate-950 text-slate-400 py-6">
-        <div className="max-w-7xl mx-auto px-6 flex justify-between text-sm">
-          <span>©️ 2002 WQE-Belge Dijital</span>
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between gap-3 text-sm">
+          <span>© 2026 WQE-Belge Dijital</span>
           <span>Belge Doğrulama Sistemi</span>
         </div>
       </footer>
