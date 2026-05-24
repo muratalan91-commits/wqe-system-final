@@ -12,6 +12,7 @@ export default function Home() {
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [revizyontarihi, setRevizyontarihi] = useState("");
   const [status, setStatus] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
   const [siteUrl, setSiteUrl] = useState("");
@@ -135,6 +136,7 @@ export default function Home() {
       setAddress("");
       setDescription("");
       setDate("");
+      setRevizyontarihi("");
       setStatus("");
       setPdfUrl("");
       return;
@@ -148,6 +150,7 @@ export default function Home() {
     setAddress(data.address || "");
     setDescription(data.description || "");
     setDate(data.date || "");
+    setRevizyontarihi(data.revizyontarihi || "");
     setStatus(data.status || "valid");
     setPdfUrl(data.pdfUrl || "");
   };
@@ -328,6 +331,14 @@ export default function Home() {
                       <span className="text-slate-500">{t[lang].owner}</span>
                       <strong className="text-right">{owner}</strong>
                     </div>
+{revizyontarihi && (
+  <div className="flex justify-between gap-4 border-b pb-2">
+    <span className="text-slate-500">
+      {lang === "tr" ? "Revizyon tarihi" : "Revision date"}
+    </span>
+    <strong>{revizyontarihi}</strong>
+  </div>
+)}
 
                     {address && (
                       <div className="border-b pb-2">
