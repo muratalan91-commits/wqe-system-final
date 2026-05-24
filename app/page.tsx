@@ -72,17 +72,28 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-700 to-cyan-400 flex items-center justify-center overflow-hidden shadow-lg">
-              <img
-                src="/logo.png"
-                alt="WQE Logo"
-                className="absolute inset-0 w-full h-full object-contain bg-white"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-              <span className="text-white font-black text-lg">W</span>
-            </div>
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-700 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-700/30">
+  <svg
+    width="30"
+    height="30"
+    viewBox="0 0 24 24"
+    fill="none"
+    className="text-white"
+  >
+    <path
+      d="M12 2L4 5.5V11C4 16.2 7.4 20.9 12 22C16.6 20.9 20 16.2 20 11V5.5L12 2Z"
+      fill="currentColor"
+      opacity="0.95"
+    />
+    <path
+      d="M9.5 12.2L11.2 13.9L15 9.8"
+      stroke="#0f172a"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+</div>
 
             <div>
               <h1 className="text-2xl font-black text-blue-700">
