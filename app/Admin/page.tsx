@@ -227,7 +227,6 @@ const filteredDocuments = documents.filter((item) =>
   </button>
 </div>
           
-        </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
   <div className="bg-slate-900 p-5 rounded-3xl border border-white/10">
