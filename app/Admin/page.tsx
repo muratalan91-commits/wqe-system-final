@@ -11,8 +11,10 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  query,
+  orderBy,
+  limit,
 } from "firebase/firestore";
-
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,6 +34,7 @@ export default function AdminPage() {
   const [message, setMessage] = useState("");
   const [verifyLink, setVerifyLink] = useState("");
   const [documents, setDocuments] = useState<any[]>([]);
+  const [queryLogs, setQueryLogs] = useState<any[]>([]);
   const [search, setSearch] = useState("");
 
   const totalDocuments = documents.length;
@@ -76,6 +79,22 @@ export default function AdminPage() {
 
     setDocuments(docs);
   };
+  const loadQueryLogs = async () => {
+  const q = query(
+    collection(db, "query_logs"),
+    orderBy("createdAt", "desc"),
+    limit(20)
+  );
+
+  const querySnapshot = await getDocs(q);
+  const logs: any[] = [];
+
+  querySnapshot.forEach((item) => {
+    logs.push({ id: item.id, ...item.data() });
+  });
+
+  setQueryLogs(logs);
+};
 
   useEffect(() => {
     const savedLogin = localStorage.getItem("wqe_admin_login");
@@ -85,6 +104,7 @@ export default function AdminPage() {
     }
 
     loadDocuments();
+    loadQueryLogs();
   }, []);
 
   const addDocument = async () => {
