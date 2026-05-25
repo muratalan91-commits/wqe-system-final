@@ -272,7 +272,42 @@ export default function AdminPage() {
             <div className="text-3xl font-black mt-2">{cancelledDocuments}</div>
           </div>
         </div>
+<div className="bg-slate-900 p-5 rounded-3xl mb-8 border border-white/10">
+  <h2 className="text-2xl font-black mb-4">
+    Son Sorgular
+  </h2>
 
+  {queryLogs.length === 0 ? (
+    <div className="text-slate-400 text-sm">
+      Henüz sorgu kaydı yok.
+    </div>
+  ) : (
+    <div className="space-y-3">
+      {queryLogs.map((log) => (
+        <div
+          key={log.id}
+          className="bg-slate-800 rounded-2xl p-4 border border-white/10"
+        >
+          <div className="font-black text-blue-300">
+            Kod: {log.code}
+          </div>
+
+          <div className="text-sm text-green-300">
+            Durum:
+            {log.success ? " Başarılı" : " Başarısız"}
+          </div>
+
+          <div className="text-xs text-slate-400 mt-1">
+            Tarih:
+            {log.createdAt?.toDate
+              ? log.createdAt.toDate().toLocaleString("tr-TR")
+              : "-"}
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
         <div className="bg-slate-900 p-5 rounded-3xl mb-8 border border-white/10">
           <h2 className="text-2xl font-black mb-3">Kurumsal Dashboard</h2>
 
