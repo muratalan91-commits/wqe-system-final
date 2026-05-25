@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import VerifyCard from "../components/VerifyCard";
 
 export default function Home() {
@@ -155,6 +155,16 @@ export default function Home() {
     }
 
     const data: any = querySnapshot.docs[0].data();
+    try {
+  await addDoc(collection(db, "query_logs"), {
+    code: searchCode,
+    success: true,
+    createdAt: new Date(),
+    userAgent: navigator.userAgent,
+  });
+} catch (e) {
+  console.log(e);
+}
 
     setResult(t[lang].validResult);
     setDocumentName(data.name || "");
