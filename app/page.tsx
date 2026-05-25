@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-
+import VerifyCard from "../components/VerifyCard";
 export default function Home() {
   const [code, setCode] = useState("");
   const [result, setResult] = useState("");
@@ -315,6 +315,8 @@ export default function Home() {
             </button>
 
             {result && (
+  <VerifyCard belge={result} />
+)}
               <div className="mt-6 border border-slate-200 rounded-2xl p-5 bg-gradient-to-br from-white to-slate-100 shadow-inner">
                 <div
                   className={`text-2xl font-black mb-4 ${
@@ -425,7 +427,7 @@ export default function Home() {
                   </div>
                 )}
               </div>
-            )}
+            
           </div>
         </div>
       </section>
