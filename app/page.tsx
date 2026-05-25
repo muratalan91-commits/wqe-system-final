@@ -314,8 +314,16 @@ export default function Home() {
               {t[lang].verifyButton}
             </button>
 
-            {result && (
-  <VerifyCard belge={result} />
+            {result.includes("✅") && (
+  <VerifyCard
+    belge={{
+      name: documentName,
+      code: code,
+      owner: owner,
+      firma: owner,
+      date: date,
+    }}
+  />
 )}
               <div className="mt-6 border border-slate-200 rounded-2xl p-5 bg-gradient-to-br from-white to-slate-100 shadow-inner">
                 <div

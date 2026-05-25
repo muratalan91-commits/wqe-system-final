@@ -12,24 +12,28 @@ export default function VerifyCard({ belge }) {
 
       <div className="hologram"></div>
 
-      <h2>{belge.name}</h2>
+      <h2>{belge.name || "Belge"}</h2>
 
       <p>
         Belge Kodu:
-        <strong> {belge.code}</strong>
+        <strong> {belge.code || "-"}</strong>
       </p>
-<p>
-  Firma:
-  <strong>
-    {" "}
-    {belge.company ||
-     belge.firma ||
-     belge.firmaAdi ||
-     "Firma bilgisi yok"}
-  </strong>
-</p>
+
       <p>
-        Tarih: {belge.date}
+        Firma:
+        <strong>
+          {" "}
+          {belge.company ||
+           belge.firma ||
+           belge.owner ||
+           belge.firmaAdi ||
+           "Firma bilgisi yok"}
+        </strong>
+      </p>
+
+      <p>
+        Tarih:
+        <strong> {belge.date || "-"}</strong>
       </p>
 
       <div className="qr-area">
